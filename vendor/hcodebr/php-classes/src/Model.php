@@ -14,7 +14,7 @@ $fieldName = substr($name, 3, strlen ($name));
 
 switch ($method) {
 	case 'get':
-	return $this->values[$fieldName];
+	return (isset($this->values[$fieldName])) ? $this->values[$fieldName] : NULL;// se foi definidido retorna da maneira que estava acontecendo antes se nao for retorna valor NULL
 		break;
 
 	case 'set':

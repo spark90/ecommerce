@@ -6,6 +6,7 @@
 	use \Hcode\Page;// Pra criar o html do site
 	use \Hcode\PageAdmin;//Pra criar o html do admin
 	use \Hcode\Model\User;
+	use \Hcode\Model\Category;
 
 
 	$app = new Slim();
@@ -218,6 +219,88 @@
 
 	 });
 
+	 $app->get("/admin/categories", function(){
+ 		User::verifyLogin();
+	 	$categories = Category::listAll();
+
+ 		$page = new PageAdmin();
+	
+		$page->setTpl("categories", [
+			"categories"=>$categories
+			]);
+
+
+
+	 });
+
+
+	 $app->get("/admin/categories/create", function(){
+	 	User::verifyLogin();
+ 		
+ 		$page = new PageAdmin();
+	
+		$page->setTpl("categories-create");
+
+
+
+	 });
+
+	 $app->post("/admin/categories/create", function(){
+	 	User::verifyLogin();
+ 		
+ 		$category = new Category();
+
+ 		$category->setData($_POST);
+	
+		$category->save();
+
+		header('Location: /admin/categories');//redireciona para a tela principal
+		exit;//para retornar a pagina
+
+
+	 });
+
+	 $app->get("/admin/categories/:idcategory/delete", function($idcategory){
+	 	User::verifyLogin();
+	 	$category = new Category();
+	 	$category->get((int)$idcategory);
+	 	$category->delete();
+
+	 	header('Location: /admin/categories');
+	 	exit;
+
+
+
+
+	 });
+
+	 $app->get("/admin/categories/:idcategory", function($idcategory){//rota tem uma tela vai mostrar html
+	 	User::verifyLogin();
+	 	$category = new Category();
+	 	$category->get((int)$idcategory);//pega a variavel criada no get 
+	 	$page = new PageAdmin();
+	 	$page->setTpl("categories-update",[
+	 		"category"=>$category->getValues()// passando o valor para o template  convertendo um objeto para um array
+
+	 	]);
+
+
+
+
+	 });
+
+	 	 $app->post("/admin/categories/:idcategory", function($idcategory){//rota tem uma tela vai mostrar html
+	 	 User::verifyLogin();
+	 	$category = new Category();
+	 	$category->get((int)$idcategory);//pega a variavel criada no get 
+	 	$category->setData($_POST);//carrega os dados atuais e bota os dados que recebeu no post
+	 	$category->save();
+	 	header("Location: /admin/categories ");
+	 	exit;
+
+
+
+	 });
 
 	$app->run();// se tudo tiver carregado ele roda
 ?>
