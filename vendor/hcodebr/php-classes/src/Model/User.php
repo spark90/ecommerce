@@ -162,9 +162,12 @@ public static function listAll()
 			));
 
 
+       $data = $results[0];
+
         $data['desperson'] = utf8_encode($data['desperson']);
- 
-        $this->setData($results[0]);
+
+
+        $this->setData($data);
 
 
 

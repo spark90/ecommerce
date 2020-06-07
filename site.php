@@ -268,5 +268,71 @@ $app->post("/register", function(){
 
 
 
+	$app->get("/forgot", function(){//mostra no html o esqueci a senha
+
+		$page = new Page();
+		$page->setTpl("forgot");
+
+
+
+	});
+
+	$app->post("/forgot", function (){//pega o email que o usuario mandou via post
+		
+	$user = User::getForgot($_POST["email"], false);// false para entender que nao esta mais na administração
+
+	header("Location: /forgot/sent");
+	exit;
+
+	});
+
+	$app->get("/forgot/sent", function(){
+
+		$page = new Page();
+	
+		$page->setTpl("forgot-sent");
+
+		
+
+	});
+
+	$app->get("/forgot/reset", function(){
+		$user = User::validForgotDecrypt($_GET["code"]);//verifica o codigo via get
+
+		$page = new Page();
+	
+		$page->setTpl("forgot-reset", array(
+			"name"=>$user["desperson"],//pega o name dentro da variavel desperson no banco de dados
+			"code"=>$_GET["code"]
+
+		));
+
+
+	});
+
+	 $app->post("/forgot/reset", function(){
+	 	$forgot = User::validForgotDecrypt($_POST["code"]);//verifica o codigo via post
+	 	User::setForgotUsed($forgot["idrecovery"]);
+
+	 	$user = new User();
+
+	 	$user->get((int)$forgot["iduser"]);
+
+	 	$password =  password_hash($_POST["password"], PASSWORD_DEFAULT,[
+	 		"cost"=>12
+	 		]);//criptografa a nova senha
+
+	 	$user->setPassword($password);// pega o password do formulario via post
+
+	 	$page = new Page();
+	
+		$page->setTpl("forgot-reset-success");
+
+
+
+
+	 });
+
+
 
  ?>

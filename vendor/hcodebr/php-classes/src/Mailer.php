@@ -18,7 +18,7 @@ class Mailer{
 	private $mail;
 
 	const USERNAME = "douglasmerall89@gmail.com";
-	const PASSWORD = "<?password?>";
+	const PASSWORD = "douglas89";
 	const NAME_FROM = "Hcode Store";
 
 	public function __construct($toAddress, $toName, $subject, $tplName, $data = array())
