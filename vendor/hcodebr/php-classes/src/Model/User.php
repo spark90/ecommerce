@@ -13,6 +13,7 @@ Class User extends Model{
     const ERROR = "UserError";
     const SECRET_IV = "HcodePhp7_Secret_IV";
     const ERROR_REGISTER = "UseErrorRegister";
+    const SUCCESS = "UserSuccess";
 
     
     public static function getFromSession()
@@ -418,6 +419,31 @@ public static function listAll()
         ]);
 
         return (count($results) > 0);
+
+    }
+
+public static function setSuccess($msg)
+    {
+
+        $_SESSION[User::SUCCESS] = $msg;
+
+    }
+
+    public static function getSuccess()
+    {
+
+        $msg = (isset($_SESSION[User::SUCCESS]) && $_SESSION[User::SUCCESS]) ? $_SESSION[User::SUCCESS] : '';
+
+        User::clearSuccess();
+
+        return $msg;
+
+    }
+
+    public static function clearSuccess()
+    {
+
+        $_SESSION[User::SUCCESS] = NULL;
 
     }
 
